@@ -23,20 +23,19 @@ var _jsxFileName = "/Applications/MAMP/htdocs/wp-content/themes/react-test/react
 
 
 function App(props) {
-  console.log("APP PROPS", props);
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "App",
     __self: this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 11,
+      lineNumber: 10,
       columnNumber: 9
     }
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Switch"], {
     __self: this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 12,
+      lineNumber: 11,
       columnNumber: 13
     }
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Route"], {
@@ -46,34 +45,16 @@ function App(props) {
     __self: this,
     __source: {
       fileName: _jsxFileName,
+      lineNumber: 12,
+      columnNumber: 17
+    }
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Route"], {
+    path: "/:route/:slug",
+    component: _components_Single__WEBPACK_IMPORTED_MODULE_3__["default"],
+    __self: this,
+    __source: {
+      fileName: _jsxFileName,
       lineNumber: 13,
-      columnNumber: 17
-    }
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Route"], {
-    path: "/pages",
-    component: _components_Single__WEBPACK_IMPORTED_MODULE_3__["default"],
-    __self: this,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 14,
-      columnNumber: 17
-    }
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Route"], {
-    path: "/pages/:slug",
-    component: _components_Single__WEBPACK_IMPORTED_MODULE_3__["default"],
-    __self: this,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 15,
-      columnNumber: 17
-    }
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Route"], {
-    path: "/post/:slug",
-    component: _components_Single__WEBPACK_IMPORTED_MODULE_3__["default"],
-    __self: this,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 16,
       columnNumber: 17
     }
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Route"], {
@@ -82,7 +63,7 @@ function App(props) {
     __self: this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 17,
+      lineNumber: 15,
       columnNumber: 17
     }
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Route"], {
@@ -90,7 +71,7 @@ function App(props) {
     __self: this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 18,
+      lineNumber: 16,
       columnNumber: 17
     }
   })));
@@ -123,21 +104,31 @@ const Consumer = storeContext.Consumer;
 class Provider extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
   constructor(props) {
     super(props);
-    let restType = this.getRestType(props.match.path);
-    let route = props.match.path;
-    let slug = props.match.params.slug ? props.match.params.slug : '';
+    let route = this.props.match.params.route;
+    let slug = this.props.match.params.slug ? this.props.match.params.slug : '';
     this.state = {
       slug: slug,
-      restType: restType,
       route: route,
       posts: []
     };
   }
 
-  buildUrl() {
-    let url = '/wp-json/wp/v2/';
+  getRestType() {
+    switch (this.props.match.path) {
+      case 'page':
+      case 'post':
+        return 'POST';
+        break;
 
-    switch (this.state.restType) {
+      default:
+        break;
+    }
+  }
+
+  buildUrl() {
+    let url = '/wp-json/wp/v2/'; // console.log('rest type', this.state.restType);
+
+    switch (this.state.route) {
       case 'page':
         url += 'pages/?slug=' + this.state.slug;
         break;
@@ -148,16 +139,18 @@ class Provider extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
 
       default:
         break;
-    }
+    } // console.log('URL', url);
 
-    console.log('URL', url);
+
     return url;
   }
 
   getPosts(url) {
-    let self = this;
+    let self = this; // console.log("THIS", this, "\nthis.state:", this.state)
+
     axios__WEBPACK_IMPORTED_MODULE_1___default.a.get(url).then(res => {
-      self.setState({
+      // console.log("RESPONSE",res.data)
+      self.setState({ ...this.state,
         posts: res.data
       });
     }).catch(err => {
@@ -167,7 +160,7 @@ class Provider extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
   }
 
   componentDidMount() {
-    console.log('CONTEXT get posts');
+    // console.log('CONTEXT get posts', this.props);
     this.getPosts(this.buildUrl());
   }
 
@@ -180,7 +173,7 @@ class Provider extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
       __self: this,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 66,
+        lineNumber: 79,
         columnNumber: 13
       }
     }, this.props.children);
@@ -254,34 +247,36 @@ var _jsxFileName = "/Applications/MAMP/htdocs/wp-content/themes/react-test/react
 
 
 const Archive = props => {
-  return (
-    /*#__PURE__*/
-    // <Provider>
-    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      className: "Post",
-      __self: undefined,
-      __source: {
-        fileName: _jsxFileName,
-        lineNumber: 11,
-        columnNumber: 13
-      }
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_shared_Header__WEBPACK_IMPORTED_MODULE_1__["default"], {
-      __self: undefined,
-      __source: {
-        fileName: _jsxFileName,
-        lineNumber: 12,
-        columnNumber: 17
-      }
-    }), "this is Archive component!!!!", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_shared_Footer__WEBPACK_IMPORTED_MODULE_2__["default"], {
-      __self: undefined,
-      __source: {
-        fileName: _jsxFileName,
-        lineNumber: 14,
-        columnNumber: 17
-      }
-    })) // </Provider>
-
-  );
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Context_Context__WEBPACK_IMPORTED_MODULE_4__["Provider"], {
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 10,
+      columnNumber: 9
+    }
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "Post",
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 11,
+      columnNumber: 13
+    }
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_shared_Header__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 12,
+      columnNumber: 17
+    }
+  }), "this is Archive component!!!!", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_shared_Footer__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 14,
+      columnNumber: 17
+    }
+  })));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Archive);
@@ -359,42 +354,43 @@ var _jsxFileName = "/Applications/MAMP/htdocs/wp-content/themes/react-test/react
 
 
 const Single = props => {
-  console.log('SINGLES', props);
-  return (
-    /*#__PURE__*/
-    // <Provider>
-    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      className: "Post",
-      __self: undefined,
-      __source: {
-        fileName: _jsxFileName,
-        lineNumber: 12,
-        columnNumber: 13
-      }
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_shared_Header__WEBPACK_IMPORTED_MODULE_1__["default"], {
-      __self: undefined,
-      __source: {
-        fileName: _jsxFileName,
-        lineNumber: 13,
-        columnNumber: 17
-      }
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_shared_TheLoop__WEBPACK_IMPORTED_MODULE_3__["default"], {
-      __self: undefined,
-      __source: {
-        fileName: _jsxFileName,
-        lineNumber: 14,
-        columnNumber: 17
-      }
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_shared_Footer__WEBPACK_IMPORTED_MODULE_2__["default"], {
-      __self: undefined,
-      __source: {
-        fileName: _jsxFileName,
-        lineNumber: 15,
-        columnNumber: 17
-      }
-    })) // </Provider>
-
-  );
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Context_Context__WEBPACK_IMPORTED_MODULE_4__["Provider"], Object.assign({}, props, {
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 10,
+      columnNumber: 9
+    }
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "Post",
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 11,
+      columnNumber: 13
+    }
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_shared_Header__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 12,
+      columnNumber: 17
+    }
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_shared_TheLoop__WEBPACK_IMPORTED_MODULE_3__["default"], Object.assign({}, props, {
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 13,
+      columnNumber: 17
+    }
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_shared_Footer__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 14,
+      columnNumber: 17
+    }
+  })));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Single);
@@ -480,11 +476,13 @@ var _jsxFileName = "/Applications/MAMP/htdocs/wp-content/themes/react-test/react
 
 
 const TheLoop = ({
-  context
+  context,
+  ...props
 }) => {
   const posts = () => context.posts;
 
-  const pos = posts();
+  const pos = posts(); // console.log('LOOP:\n', pos, '\nPROPS:', props);
+
   let results = '';
 
   if (context.appError) {
@@ -493,7 +491,7 @@ const TheLoop = ({
       __self: undefined,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 12,
+        lineNumber: 13,
         columnNumber: 19
       }
     }, context.appError);
@@ -504,7 +502,7 @@ const TheLoop = ({
         __self: undefined,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 15,
+          lineNumber: 16,
           columnNumber: 23
         }
       }, "no results");
@@ -512,11 +510,12 @@ const TheLoop = ({
       results = pos.map((item, i) => {
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ThePost__WEBPACK_IMPORTED_MODULE_2__["default"], {
           key: i,
-          index: i,
+          post: item,
+          route: context.route,
           __self: undefined,
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 18,
+            lineNumber: 19,
             columnNumber: 24
           }
         });
@@ -543,71 +542,102 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./helpers */ "./src/components/shared/helpers.js");
+/* harmony import */ var react_html_parser__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-html-parser */ "../node_modules/react-html-parser/lib/index.js");
+/* harmony import */ var react_html_parser__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react_html_parser__WEBPACK_IMPORTED_MODULE_3__);
 var _jsxFileName = "/Applications/MAMP/htdocs/wp-content/themes/react-test/react-src/src/components/shared/ThePost.js";
 
 
 
+ // import sanitizeHtml from 'sanitize-html-react';
+
 const ThePost = ({
-  index,
-  context
+  post,
+  route
 }) => {
-  const posts = () => context.posts;
+  // const posts = () => item.posts;
+  // const item = posts()[index];
+  // let linkPrefix = item.type === 'page' ? '/page/' : '/post/';
+  let theContent = '',
+      renderContent = '';
 
-  const item = posts()[index];
-  let linkPrefix = item.type === 'page' ? '/page/' : '/post/';
-  let theContent = '';
-
-  switch (context.route) {
+  switch (route) {
     case '/':
     case '/search/:term':
     case '/category/:catid':
-      theContent = item.excerpt.rendered;
+      theContent = post.excerpt.rendered;
       break;
 
     default:
-      theContent = item.content.rendered;
+      theContent = post.content.rendered;
       break;
   }
 
+  if (theContent !== '') {
+    console.log('theContent', theContent);
+    renderContent = Object(_helpers__WEBPACK_IMPORTED_MODULE_2__["sanitizeContent"])(theContent);
+  }
+
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    id: 'post-id-' + item.id,
+    id: 'post-id-' + post.id,
     className: 'post-item',
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 24,
+      lineNumber: 33,
       columnNumber: 9
     }
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 25,
+      lineNumber: 34,
       columnNumber: 13
     }
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
-    to: linkPrefix + item.slug,
+    to: "/" + post.type + "/" + post.slug,
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 25,
+      lineNumber: 34,
       columnNumber: 17
     }
-  }, item.title.rendered)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+  }, post.title.rendered)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "post-content",
-    setInnerHTML: {
-      __html: theContent
-    },
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 27,
+      lineNumber: 36,
       columnNumber: 13
     }
-  }));
+  }, react_html_parser__WEBPACK_IMPORTED_MODULE_3___default()(renderContent)));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (ThePost);
+
+/***/ }),
+
+/***/ "./src/components/shared/helpers.js":
+/*!******************************************!*\
+  !*** ./src/components/shared/helpers.js ***!
+  \******************************************/
+/*! exports provided: sanitizeContent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "sanitizeContent", function() { return sanitizeContent; });
+/* harmony import */ var sanitize_html_react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! sanitize-html-react */ "./node_modules/sanitize-html-react/index.js");
+/* harmony import */ var sanitize_html_react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(sanitize_html_react__WEBPACK_IMPORTED_MODULE_0__);
+
+const allowedTags = ['b', 'i', 'em', 'strong', 'a', 'p'];
+const allowedAttr = {
+  'a': ['href', 'alt']
+};
+const sanitizeContent = content => sanitize_html_react__WEBPACK_IMPORTED_MODULE_0___default()(content, {
+  allowedTags: allowedTags,
+  allowedAttr: allowedAttr
+});
 
 /***/ }),
 
@@ -673,6 +703,28 @@ react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render( /*#__PURE__*/react__WEB
 
 module.exports = __webpack_require__(/*! /Applications/MAMP/htdocs/wp-content/themes/react-test/react-src/src/index.js */"./src/index.js");
 
+
+/***/ }),
+
+/***/ 2:
+/*!*********************************!*\
+  !*** readable-stream (ignored) ***!
+  \*********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/* (ignored) */
+
+/***/ }),
+
+/***/ 3:
+/*!*********************************!*\
+  !*** readable-stream (ignored) ***!
+  \*********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/* (ignored) */
 
 /***/ })
 
