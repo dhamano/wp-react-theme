@@ -63,7 +63,7 @@ function App(props) {
     __self: this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 15,
+      lineNumber: 14,
       columnNumber: 17
     }
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Route"], {
@@ -71,7 +71,7 @@ function App(props) {
     __self: this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 16,
+      lineNumber: 15,
       columnNumber: 17
     }
   })));
@@ -104,25 +104,19 @@ const Consumer = storeContext.Consumer;
 class Provider extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
   constructor(props) {
     super(props);
-    let route = this.props.match.params.route;
-    let slug = this.props.match.params.slug ? this.props.match.params.slug : '';
+    let route = '',
+        slug = '';
+
+    if (this.props.match !== undefined) {
+      route = this.props.match.params.route;
+      slug = this.props.match.params.slug ? this.props.match.params.slug : '';
+    }
+
     this.state = {
       slug: slug,
       route: route,
       posts: []
     };
-  }
-
-  getRestType() {
-    switch (this.props.match.path) {
-      case 'page':
-      case 'post':
-        return 'POST';
-        break;
-
-      default:
-        break;
-    }
   }
 
   buildUrl() {
@@ -138,6 +132,7 @@ class Provider extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
         break;
 
       default:
+        url += 'posts';
         break;
     } // console.log('URL', url);
 
@@ -173,7 +168,7 @@ class Provider extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
       __self: this,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 79,
+        lineNumber: 74,
         columnNumber: 13
       }
     }, this.props.children);
@@ -269,7 +264,14 @@ const Archive = props => {
       lineNumber: 12,
       columnNumber: 17
     }
-  }), "this is Archive component!!!!", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_shared_Footer__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_shared_TheLoop__WEBPACK_IMPORTED_MODULE_3__["default"], Object.assign({}, props, {
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 13,
+      columnNumber: 17
+    }
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_shared_Footer__WEBPACK_IMPORTED_MODULE_2__["default"], {
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
@@ -408,19 +410,65 @@ const Single = props => {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./helpers */ "./src/components/shared/helpers.js");
 var _jsxFileName = "/Applications/MAMP/htdocs/wp-content/themes/react-test/react-src/src/components/shared/Footer.js";
 
 
+
+
 const Footer = props => {
+  const [footerMenu, setFooterMenu] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(undefined);
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
+    async function setMenu() {
+      let menuItems = await Object(_helpers__WEBPACK_IMPORTED_MODULE_2__["getMenu"])('footer-menu');
+      setFooterMenu(menuItems);
+    }
+
+    if (footerMenu === undefined) setMenu();
+  }, [footerMenu]);
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("footer", {
     className: "Post",
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 5,
+      lineNumber: 18,
       columnNumber: 9
     }
-  }, "it's our footer!!");
+  }, footerMenu && footerMenu.length > 0 ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", {
+    className: "menu footer-menu",
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 20,
+      columnNumber: 13
+    }
+  }, footerMenu.map(item => {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
+      __self: undefined,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 23,
+        columnNumber: 25
+      }
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+      to: `/page/${item.object_slug}`,
+      __self: undefined,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 23,
+        columnNumber: 29
+      }
+    }, item.title));
+  })) : '', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+    class: "copyright",
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 28,
+      columnNumber: 13
+    }
+  }, "\xA9\u20092017\u200A\u2013\u200A", `${new Date().getFullYear()}`, ". All rights reserved."));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Footer);
@@ -438,19 +486,57 @@ const Footer = props => {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./helpers */ "./src/components/shared/helpers.js");
 var _jsxFileName = "/Applications/MAMP/htdocs/wp-content/themes/react-test/react-src/src/components/shared/Header.js";
 
 
+
+
 const Header = props => {
+  const [headerMenu, setHeaderMenu] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(undefined);
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
+    async function setMenu() {
+      let menuItems = await Object(_helpers__WEBPACK_IMPORTED_MODULE_2__["getMenu"])('header-main');
+      setHeaderMenu(menuItems);
+    }
+
+    if (headerMenu === undefined) setMenu();
+  }, [headerMenu]);
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("header", {
     className: "Post",
     __self: undefined,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 5,
+      lineNumber: 18,
       columnNumber: 9
     }
-  }, "it's our header!!");
+  }, headerMenu && headerMenu.length > 0 ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", {
+    className: "menu footer-menu",
+    __self: undefined,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 20,
+      columnNumber: 13
+    }
+  }, headerMenu.map(item => {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
+      __self: undefined,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 23,
+        columnNumber: 25
+      }
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+      to: `/page/${item.object_slug}`,
+      __self: undefined,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 23,
+        columnNumber: 29
+      }
+    }, item.title));
+  })) : '');
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Header);
@@ -574,7 +660,7 @@ const ThePost = ({
   }
 
   if (theContent !== '') {
-    console.log('theContent', theContent);
+    // console.log('theContent', theContent);
     renderContent = Object(_helpers__WEBPACK_IMPORTED_MODULE_2__["sanitizeContent"])(theContent);
   }
 
@@ -621,14 +707,18 @@ const ThePost = ({
 /*!******************************************!*\
   !*** ./src/components/shared/helpers.js ***!
   \******************************************/
-/*! exports provided: sanitizeContent */
+/*! exports provided: sanitizeContent, getMenu */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "sanitizeContent", function() { return sanitizeContent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getMenu", function() { return getMenu; });
 /* harmony import */ var sanitize_html_react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! sanitize-html-react */ "./node_modules/sanitize-html-react/index.js");
 /* harmony import */ var sanitize_html_react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(sanitize_html_react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
+
 
 const allowedTags = ['b', 'i', 'em', 'strong', 'a', 'p'];
 const allowedAttr = {
@@ -638,6 +728,34 @@ const sanitizeContent = content => sanitize_html_react__WEBPACK_IMPORTED_MODULE_
   allowedTags: allowedTags,
   allowedAttr: allowedAttr
 });
+
+const getSpecifiedMenuID = menuName => {
+  return axios__WEBPACK_IMPORTED_MODULE_1___default.a.get('/wp-json/wp-api-menus/v2/menus').then(res => {
+    // console.log('MENU HELPER', res);
+    const regMenus = res.data;
+    const wantedMenu = regMenus.filter(item => {
+      return menuName === item.name;
+    }); // console.log('wantedMenu[0].ID',wantedMenu[0].ID)
+
+    return wantedMenu[0].ID;
+  }).catch(err => {
+    console.log('MENU HELPER', err);
+  });
+};
+
+const getSpecifiedMenu = async id => {
+  return axios__WEBPACK_IMPORTED_MODULE_1___default.a.get(`/wp-json/wp-api-menus/v2/menus/${id}`).then(res => {
+    return res.data.items;
+  }).catch(err => {
+    console.log(err);
+  });
+};
+
+const getMenu = async menuName => {
+  const menuId = await getSpecifiedMenuID(menuName);
+  const footerMenu = await getSpecifiedMenu(menuId);
+  return footerMenu;
+};
 
 /***/ }),
 
