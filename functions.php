@@ -3,6 +3,39 @@
 add_theme_support( 'post-thumbnails' );
 add_image_size( 'featured-blog-large', 1400, 300, true );
 
+/* Enable nav menus/widgets for theme */
+
+function register_menus() {
+  register_nav_menus(
+    array(
+      'header-menu' => __( 'Header Menu' ),
+      'footer-menu' => __( 'Footer Menu' )
+    )
+  );
+}
+add_action( 'init', 'register_menus' );
+
+function themename_widgets_init() {
+    register_sidebar( array(
+        'name'          => __( 'Blog Sidebar', 'My Website' ),
+        'id'            => 'blog',
+        'before_widget' => '<div id="%1$s" class="widget %2$s">',
+        'after_widget'  => '</div>',
+        'before_title'  => '<h4 class="widget-title">',
+        'after_title'   => '</h4>',
+    ) );
+ 
+    register_sidebar( array(
+        'name'          => __( 'Comic Sidebar', 'My Website' ),
+        'id'            => 'comic',
+        'before_widget' => '<div id="%1$s" class="widget %2$s">',
+        'after_widget'  => '</div>',
+        'before_title'  => '<h4 class="widget-title">',
+        'after_title'   => '</h4>',
+    ) );
+}
+add_action( 'widgets_init', 'themename_widgets_init' );
+
  /*
     rewrite for permalink so pages include page in url for routing
  */
