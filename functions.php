@@ -3,6 +3,16 @@
 add_theme_support( 'post-thumbnails' );
 add_image_size( 'featured-blog-large', 1400, 300, true );
 
+function require_menu_api_plugin_notice() {
+    // global $pagenow;
+    $activePlugins = get_option( 'active_plugins', array() );
+
+    if ( current_user_can( 'activate_plugins' ) && !in_array("wp-api-menus/wp-api-menus.php", $activePlugins)) {
+        echo '<div class="notice notice-warning is-dismissible"><p>This theme requires <a href="/wp-admin/plugin-install.php?tab=plugin-information&plugin=wp-api-menus"><strong>WP REST API Menus</strong></a></p></div>';
+    }
+}
+add_action('admin_notices', 'require_menu_api_plugin_notice');
+
 /* Enable nav menus/widgets for theme */
 
 function register_menus() {
